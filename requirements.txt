@@ -4,4 +4,3 @@ flask
 gunicorn
 python-dotenv
 requests
-sentence-transformers
