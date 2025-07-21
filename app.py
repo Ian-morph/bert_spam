@@ -76,7 +76,7 @@ def telegram_webhook():
         print(X_emb.shape)
         pred = model.predict(X_emb)
 
-        if pred[0] =="ham":
+        if pred =="ham":
             result = "Not Spam"
         else:
             result = "Spam"
