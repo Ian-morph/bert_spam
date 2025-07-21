@@ -6,7 +6,7 @@ from flask import Flask, request
 from dotenv import load_dotenv
 import requests
 import joblib
-
+from sentence_transformers import SentenceTransformer
 
 
 # === Environment Setup ===
@@ -16,13 +16,14 @@ url = f'https://api.telegram.org/bot{TELEGRAM_TOKEN}/'
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 
 # === prepare classifier ===
-encoder = joblib.load("cv_encoder.pkl")  # Load the encoder
+#encoder = joblib.load("cv_encoder.pkl")  # Load the encoder
 # Load the pre-trained model
 model = joblib.load("lr_model.pkl")
-
+bert_model = SentenceTransformer('bert-base-nli-mean-tokens')
 # message_text = "Had your mobile 11 months or more? U R entitled to Update to the latest colour mobiles with camera for Free! Call The Mobile Update Co FREE on 08002986030"
 # # run classification
 # X_emb = encoder.transform([message_text])
+
 # print(X_emb.shape)
 # pred = model.predict(X_emb)
 # print(pred)
@@ -72,7 +73,8 @@ def telegram_webhook():
         requests.get(send_action)
 
         # run classification
-        X_emb = encoder.transform([message_text])
+        #X_emb = encoder.transform([message_text])
+        X_emb = bert_model.encode([message_text])
         print(X_emb.shape)
         pred = model.predict(X_emb)
 
